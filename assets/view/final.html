@@ -37,7 +37,7 @@
 							<p class="text-center lead">
 									Siamo pronti! clicca il bottone per scaricare il risultato.
 								</p>
-								<form method="get" action="/download/{{.session}}/estrazione.xlsx">
+								<form method="get" action="/download/{{.sessid}}/estrazione.xlsx">
 									<input class="btn btn-primary btn-lg btn-block" type="submit" value="SCARICA!">
 								 </form>
 		
@@ -56,7 +56,7 @@
 			function checkFile() {
 					$.ajax({
 							type: 'POST',
-							url: '/download/{{.session}}/end.txt',
+							url: '/download/{{.sessid}}/end.txt',
 							error : function(){
 									getOutput();
 									setTimeout(function(){ checkFile(); }, 3000);
@@ -75,7 +75,7 @@
 			});
 
 			function getOutput() {
-				$( "#success" ).load( "/download/{{.session}}/output.txt", function( response, status, xhr ) {});
+				$( "#success" ).load( "/download/{{.sessid}}/output.txt", function( response, status, xhr ) {});
 			}
 		
 		</script>
