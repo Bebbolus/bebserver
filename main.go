@@ -34,7 +34,6 @@ func Chain(f http.HandlerFunc, mids []mid) http.HandlerFunc {
 func main() {
 	h.ReadJson(&ServerConf, "configurations/server.json")
 
-
 	//set server configurations
 	srv := &http.Server{
 		ReadTimeout:  time.Duration(ServerConf.Readtimeout) * time.Second,
@@ -46,9 +45,8 @@ func main() {
 	http.HandleFunc("/home", Chain(c.Home, []mid{m.Method("GET"), m.SessIdHtml(true)}))
 	http.HandleFunc("/estrazione", Chain(c.Estrazione, []mid{m.Method("POST"), m.SessIdHtml(false)}))
 	
- 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("assets/css"))))
-	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("assets/img"))))
-	
+	http.HandleFunc("/img/", c.Static)
+	http.HandleFunc("/css/", c.Static)
 
 	log.Println("start HTTP listening on ", ServerConf.Listento)
 	//SERVER START AND ERROR MANAGEMENT
