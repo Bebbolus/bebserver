@@ -6,6 +6,6 @@ import (
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	myvar := map[string]interface{}{"sessid": r.FormValue("sessid")}
+	myvar := map[string]interface{}{"alphasession": r.FormValue("alphasession")}
 	h.OutHtml(w, "assets/view/home.html", myvar)
 }

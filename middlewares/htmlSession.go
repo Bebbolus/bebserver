@@ -4,26 +4,41 @@ import (
 	"net/http"
 	"net/url"
 	h "github.com/Bebbolus/helpers"
+	"encoding/json"
+	b64 "encoding/base64"
 )
 
-
-func HtmlSession(init bool, data map[string]interface{}) func(http.HandlerFunc) http.HandlerFunc {
+func HtmlSession(init bool, key string) func(http.HandlerFunc) http.HandlerFunc {
 	return func(f http.HandlerFunc) http.HandlerFunc {
 
 		// Define the http.HandlerFunc
 		return func(w http.ResponseWriter, r *http.Request) {
+			data := make(map[string]interface{})
+			
 			if r.FormValue("alphasession") == "" {
 				if init{
-					// data["sessid"] =  h.MakeUUID()
-
+					data["sessionid"] =  h.MakeUUID()
+					marshalled, _ := json.Marshal(data)
+					
 					v := url.Values{}
-					v.Set("alphasession", h.MakeUUID())
-    				r.Form = v
+					criptedVal := b64.StdEncoding.EncodeToString(h.Encrypt(marshalled, key))
+					v.Set("alphasession",criptedVal )
+					r.Form = v
+					
 					// Call the next middleware in chain
 					f(w, r)
 					return
 				}
 			} else {
+				b64tobyte, _ := b64.StdEncoding.DecodeString(r.FormValue("alphasession"))
+				b := h.Decrypt(b64tobyte, key)
+				_ = json.Unmarshal(b, &data)
+
+				v := url.Values{}
+				for idx, val := range data{
+					v.Set(idx, val.(string))
+				}
+				r.Form = v
 				f(w, r)
 				return
 			}

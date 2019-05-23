@@ -31,6 +31,8 @@ func Chain(f http.HandlerFunc, mids []mid) http.HandlerFunc {
 	return f
 }
 
+var password string = "mia"
+
 func main() {
 	h.ReadJson(&ServerConf, "configurations/server.json")
 
@@ -42,8 +44,8 @@ func main() {
 	}
 
 	// mchain = append(chain, m.Method("GET")) //change method to thest that it work!
-	http.HandleFunc("/home", Chain(c.Home, []mid{m.Method("GET"), m.SessIdHtml(true)}))
-	http.HandleFunc("/estrazione", Chain(c.Estrazione, []mid{m.Method("POST"), m.SessIdHtml(false)}))
+	http.HandleFunc("/home", Chain(c.Home, []mid{m.Method("GET"), m.HtmlSession(true, password)}))
+	http.HandleFunc("/estrazione", Chain(c.Estrazione, []mid{m.Method("POST"), m.HtmlSession(false, password)}))
 	
 	http.HandleFunc("/img/", c.Static)
 	http.HandleFunc("/css/", c.Static)
