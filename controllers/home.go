@@ -7,5 +7,5 @@ import (
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	myvar := map[string]interface{}{"alphasession": r.FormValue("alphasession")}
-	h.OutHtml(w, "assets/view/home.html", myvar)
+	h.OutLayout(w, "assets/view/home.html", myvar)
 }

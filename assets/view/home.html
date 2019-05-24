@@ -1,110 +1,83 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
-    <title>Carica Estrazione</title>
-  </head>
-  <body>
-    <div class="container h-100">
-      <div class="row h-100 justify-content-center align-items-center">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-md-12">
-          <h1 class="text-center">FILE ESTRAZIONE</h1>     
-            <p class="text-center">
-                Questo sarà il file in cui verranno sostituiti i prezzi in base al nuovo listino.
-              </p>
-              {{ if .errors }}
-              
-                <div class="alert alert-danger" role="alert" style="display: none;">
-                    {{.errors}}
-                  </div>
-              {{end}}
-              
+{{define "yield"}}
+<div class="row h-100 justify-content-center align-items-center">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+    <h1 class="text-center">FILE ESTRAZIONE</h1>     
+      <p class="text-center">
+          Questo sarà il file in cui verranno sostituiti i prezzi in base al nuovo listino.
+        </p>
+        {{ if .errors }}
+        
+          <div class="alert alert-danger" role="alert" style="display: none;">
+              {{.errors}}
             </div>
+        {{end}}
+        
+      </div>
+  </div>
+  <div class="row justify-content-center align-items-center">
+    <form class="col-md-6" 
+      enctype="multipart/form-data"
+      action="/estrazione"
+      method="post"
+    >
+
+    
+      <div class="input-group mb-3">
+        <p>
+          Inserisci la lettera della colonna contenente i codici che verranno utilizzati
+          per cercare i prodotti dentro il listino che caricherai nel prossimo passaggio
+        </p>
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Colonna Codice</span>
+          </div>
+        <input 
+          type="text"
+          pattern="[a-zA-Z]*" 
+          oninvalid="setCustomValidity('Immettere solo lettere (massimo 2). ')" 
+          name="codiceEstrazione" 
+          maxlength="2"
+          class="form-control" 
+          placeholder="lettera della colonna, es: D" 
+          aria-describedby="basic-addon1"
+        >
+      </div>
+      <div class="input-group mb-3">
+        <p>
+            Inserisci la lettera della colonna contenente i prezzi che verranno sostituiti
+            con il prezzo nel listino che caricherai nel prossimo passaggio
+          </p>
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">Colonna Prezzo</span>
+          </div>
+        <input 
+          type="text"
+          pattern="[a-zA-Z]*" 
+          oninvalid="setCustomValidity('Immettere solo lettere (massimo 2). ')" 
+          name="prezzoEstrazione" 
+          maxlength="2"
+          class="form-control" 
+          placeholder="lettera della colonna, es: G" 
+          aria-describedby="basic-addon2"
+        >
+      </div>
+    
+
+      <div class="form-group">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="myFile" name="myFile">
+            <label class="custom-file-label" for="customFileLangHTML" data-browse="Seleziona">Scegli il file dell'estrazione dal tuo computer</label>
         </div>
-        <div class="row justify-content-center align-items-center">
-          <form class="col-md-6" 
-            enctype="multipart/form-data"
-            action="/estrazione"
-            method="post"
-          >
-            <input type="hidden" name="alphasession" value={{.alphasession}}>
-          
-            <div class="input-group mb-3">
-              <p>
-                Inserisci la lettera della colonna contenente i codici che verranno utilizzati
-                per cercare i prodotti dentro il listino che caricherai nel prossimo passaggio
-              </p>
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Colonna Codice</span>
-                </div>
-              <input 
-                type="text"
-                pattern="[a-zA-Z]*" 
-                oninvalid="setCustomValidity('Immettere solo lettere (massimo 2). ')" 
-                name="codiceEstrazione" 
-                maxlength="2"
-                class="form-control" 
-                placeholder="lettera della colonna, es: D" 
-                aria-describedby="basic-addon1"
-              >
-            </div>
-            <div class="input-group mb-3">
-              <p>
-                  Inserisci la lettera della colonna contenente i prezzi che verranno sostituiti
-                  con il prezzo nel listino che caricherai nel prossimo passaggio
-                </p>
-              <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon2">Colonna Prezzo</span>
-                </div>
-              <input 
-                type="text"
-                pattern="[a-zA-Z]*" 
-                oninvalid="setCustomValidity('Immettere solo lettere (massimo 2). ')" 
-                name="prezzoEstrazione" 
-                maxlength="2"
-                class="form-control" 
-                placeholder="lettera della colonna, es: G" 
-                aria-describedby="basic-addon2"
-              >
-            </div>
-          
-
-            <div class="form-group">
-              <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="myFile" name="myFile">
-                  <label class="custom-file-label" for="customFileLangHTML" data-browse="Seleziona">Scegli il file dell'estrazione dal tuo computer</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <input class="btn btn-primary btn-lg btn-block" type="submit" value=">> Prosegui!">
-            </div>
-            
-          </form>  
-          <div class="col-md-6">
-              <p>In questa immagine esempio la colonna D, contiene il campo "reference" che al suo interno presenta il codice del prodotto. Mentre nella colonna G è presente il vecchio prezzo che verrà sostituito con il prezzo che verrà trovato nel listino.</p>
-              <img src="img/estrazione.jpg" class="img-fluid" alt="Responsive image">
-          </div> 
-        </div>
-      </div>  
-    </div>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        bsCustomFileInput.init()
-      })
-    </script>
-  </body>
-</html>
+      </div>
+      <div class="form-group">
+        <input class="btn btn-primary btn-lg btn-block" type="submit" value=">> Prosegui!">
+      </div>
+      
+    </form>  
+    <div class="col-md-6">
+        <p>In questa immagine esempio la colonna D, contiene il campo "reference" che al suo interno presenta il codice del prodotto. Mentre nella colonna G è presente il vecchio prezzo che verrà sostituito con il prezzo che verrà trovato nel listino.</p>
+        <img src="img/estrazione.jpg" class="img-fluid" alt="Responsive image">
+    </div> 
+  </div>
+</div>  
+{{end}}
