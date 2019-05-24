@@ -3,7 +3,7 @@ package middlewares
 import (
 	"net/http"
 	"net/url"
-	h "github.com/Bebbolus/helpers"
+	h "github.com/Bebbolus/helpers/crypt"
 )
 
 

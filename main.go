@@ -6,7 +6,7 @@ import (
 	"time"
 	m "./middlewares"
 	c "./controllers"
-	h "github.com/Bebbolus/helpers"
+	h "github.com/Bebbolus/helpers/configurations"
 )
 
 //source server configuration struct to load from json configuration file
@@ -32,6 +32,7 @@ func Chain(f http.HandlerFunc, mids []mid) http.HandlerFunc {
 
 var password string = "mia"
 
+
 func main() {
 	h.ReadJson(&ServerConf, "configurations/server.json")
 
@@ -42,8 +43,10 @@ func main() {
 		Addr:         ServerConf.Listento,
 	}
 
+
+
 	// mchain = append(chain, m.Method("GET")) //change method to thest that it work!
-	http.HandleFunc("/home", Chain(c.Home, []mid{m.Method("GET"), m.HtmlSession(true, password)}))
+	http.HandleFunc("/home", Chain(c.Home, []mid{m.Method("GET"), m.HeaderSession(true, password)}))
 	http.HandleFunc("/estrazione", Chain(c.Estrazione, []mid{m.Method("POST"), m.HtmlSession(false, password)}))
 	
 	http.HandleFunc("/img/", c.Static)
